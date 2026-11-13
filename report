@@ -1,0 +1,645 @@
+# PENETRATION TESTING REPORT
+## NetworkWalks – Week 2 Project
+
+**Project:** Footprinting and Network Scanning  
+**Organization:** NetworkWalks  
+**Domain Under Assessment:** `networkwalks.com`  
+**Assessment Date:** 13 November 2026  
+**Operating System:** Kali Linux  
+**Environment:** VMware Workstation  
+**Assessment Tools:** WHOIS, theHarvester, DNSenum, WhatWeb, WAFW00F, Nmap and Zenmap  
+**Report Type:** Educational Security Assessment
+
+---
+
+# 1. Executive Summary
+
+This report documents the practical cybersecurity reconnaissance and network scanning activities conducted as part of the NetworkWalks Week 2 project.
+
+The assessment involved collecting publicly available domain information, enumerating DNS records, identifying web technologies, detecting Web Application Firewall technology and examining network services.
+
+Six Kali Linux tools were used for the elective footprinting module:
+
+1. WHOIS
+2. theHarvester
+3. DNSenum
+4. WhatWeb
+5. WAFW00F
+6. Nmap
+
+The compulsory Zenmap-based network scanning exercise was also performed.
+
+The assessment identified domain registration information, DNS infrastructure, associated hostnames, web technologies, a detected ModSecurity Web Application Firewall and multiple network services.
+
+The assessment was limited to reconnaissance and service identification. No exploitation, password attacks, vulnerability exploitation or intrusive validation was performed.
+
+No confirmed security vulnerability is claimed in this report.
+
+# 2. Assessment Objectives
+
+The primary objectives were:
+
+- Gather domain registration information.
+- Identify publicly available information associated with the target.
+- Enumerate DNS records and associated hostnames.
+- Identify the web server, CMS and other web technologies.
+- Detect the presence of a Web Application Firewall.
+- Identify open, closed and filtered network ports.
+- Detect running network services and their software versions.
+- Perform network scanning through Zenmap.
+- Document findings and provide security recommendations.
+
+# 3. Scope of Assessment
+
+## 3.1 Target Information
+
+| Parameter | Details |
+|---|---|
+| Target Domain | networkwalks.com |
+| Target IPv4 | 192.232.216.135 |
+| Reverse DNS | 192-232-216-135.unifiedlayer.com |
+| Web Server | Apache |
+| CMS | WordPress |
+| Nameserver 1 | ns6135.hostgator.com |
+| Nameserver 2 | ns6136.hostgator.com |
+| Operating System Indication | Linux |
+
+## 3.2 Assessment Activities
+
+| No. | Activity | Tool |
+|---|---|---|
+| 1 | Domain registration lookup | WHOIS |
+| 2 | Public information gathering | theHarvester |
+| 3 | DNS enumeration | DNSenum |
+| 4 | Web technology identification | WhatWeb |
+| 5 | WAF detection | WAFW00F |
+| 6 | Network reconnaissance | Nmap |
+| 7 | Graphical network scanning | Zenmap |
+
+**Scope limitation:** The supplied Week 2 instructions identify networkwalks.com for the six-tool footprinting exercise but do not specify a complete authorization scope, permitted IP range or testing restrictions. The actual authorization letter and approved scanning scope must be attached or verified separately before this report is treated as an authorized penetration test.
+
+# 4. Tools and Technologies Used
+
+| Tool | Purpose |
+|---|---|
+| WHOIS | Domain registration information |
+| theHarvester | Public information gathering |
+| DNSenum | DNS record enumeration |
+| WhatWeb | Website technology fingerprinting |
+| WAFW00F | Web Application Firewall identification |
+| Nmap | Network port and service scanning |
+| Zenmap | Graphical interface for Nmap |
+| Kali Linux | Security testing environment |
+| VMware | Virtualization environment |
+
+# 5. Methodology
+
+The assessment followed a reconnaissance-oriented methodology.
+
+## Phase 1: Domain Information Gathering
+
+WHOIS was used to retrieve domain registration information.
+
+## Phase 2: Passive Information Gathering
+
+theHarvester was used with the CRT.sh data source to search for publicly available certificate-related information.
+
+## Phase 3: DNS Enumeration
+
+DNSenum was used to identify DNS records, nameservers, mail servers and associated hostnames.
+
+## Phase 4: Web Technology Fingerprinting
+
+WhatWeb was used to identify the target website's technologies, CMS and web server.
+
+## Phase 5: WAF Identification
+
+WAFW00F was used to identify the likely Web Application Firewall technology.
+
+## Phase 6: Network Reconnaissance
+
+Nmap was used to identify network ports, service states and detected software versions.
+
+## Phase 7: Graphical Network Scanning
+
+Zenmap was used to perform and review a network scan through its graphical interface.
+
+# 6. Detailed Practical Findings
+
+## 6.1 Tool 1 – WHOIS
+
+**Objective:** Identify domain registration information and nameserver details.
+
+**Command executed:**
+
+```bash
+whois networkwalks.com
+```
+
+### Observations
+
+| Parameter | Result |
+|---|---|
+| Domain Name | NETWORKWALKS.COM |
+| Registrar | GoDaddy.com, LLC |
+| Creation Date | 2019-11-06 |
+| Updated Date | 2025-11-12 |
+| Expiration Date | 2027-11-06 |
+| Registrar IANA ID | 146 |
+| Nameserver 1 | NS6135.HOSTGATOR.COM |
+| Nameserver 2 | NS6136.HOSTGATOR.COM |
+| DNSSEC | Unsigned |
+
+### Analysis
+
+The WHOIS lookup successfully retrieved publicly available registration information.
+
+The domain was registered through GoDaddy.com, LLC. Two HostGator nameservers were identified.
+
+DNSSEC was reported as unsigned in the retrieved WHOIS record. This is an observation about the domain's reported DNSSEC status, not proof of an exploitable vulnerability.
+
+### Result
+
+WHOIS successfully retrieved the target domain's registration and nameserver information.
+
+**Evidence:** `W2-PM1_WHOIS_Result.png`
+
+---
+
+## 6.2 Tool 2 – theHarvester
+
+**Objective:** Collect publicly available information associated with the target domain.
+
+**Command executed:**
+
+```bash
+theHarvester -d networkwalks.com -b crtsh
+```
+
+**Tool Version:** 4.10.1
+
+**Data Source:** CRT.sh
+
+### Observations
+
+| Parameter | Result |
+|---|---|
+| Target | networkwalks.com |
+| IP Addresses | 0 found |
+| Email Addresses | 0 found |
+| People | 0 found |
+| Hostnames | 0 found |
+
+### Analysis
+
+The theHarvester tool successfully executed and queried the selected Certificate Transparency data source.
+
+However, the selected source returned no IP addresses, email addresses, people or hostnames.
+
+This result does not establish that no associated information exists. It only describes the output of this particular query.
+
+### Result
+
+The information-gathering command completed successfully, but no findings were returned by the selected source.
+
+**Evidence:** `W2-PM1_theHarvester_Result.png`
+
+---
+
+## 6.3 Tool 3 – DNSenum
+
+**Objective:** Identify DNS records, nameservers, mail servers and associated hostnames.
+
+**Command executed:**
+
+```bash
+dnsenum networkwalks.com
+```
+
+**Tool Version:** 1.3.1
+
+### A. Host Address
+
+| Domain | Record | IP Address |
+|---|---|---|
+| networkwalks.com | A | 192.232.216.135 |
+
+### B. Nameservers
+
+| Nameserver | IP Address |
+|---|---|
+| ns6135.hostgator.com | 50.87.144.87 |
+| ns6136.hostgator.com | 192.232.216.131 |
+
+### C. Mail Server
+
+| Hostname | Record | IP Address |
+|---|---|---|
+| mail.networkwalks.com | A | 192.232.216.135 |
+
+### D. Discovered Hostnames
+
+The following hostnames were identified:
+
+1. autodiscover.networkwalks.com
+2. ftp.networkwalks.com
+3. mail.networkwalks.com
+4. webmail.networkwalks.com
+5. www.networkwalks.com
+
+The output showed A and CNAME records for the identified hostnames.
+
+### E. DNS Zone Transfer Test
+
+DNSenum attempted zone transfers against both nameservers.
+
+The returned output was:
+
+```text
+AXFR record query failed: REFUSED
+```
+
+Both nameservers refused the AXFR requests.
+
+### Analysis
+
+The DNS enumeration successfully identified the domain's IP address, nameservers, mail server and associated hostnames.
+
+The attempted zone transfers were refused by both nameservers.
+
+No successful DNS zone transfer was observed.
+
+### Result
+
+DNSenum successfully collected DNS infrastructure information and identified associated hostnames.
+
+**Evidence:** `W2-PM1_DNSenum_Result.png`
+
+---
+
+## 6.4 Tool 4 – WhatWeb
+
+**Objective:** Identify the web server, CMS, frameworks and other technologies used by the target website.
+
+**Command executed:**
+
+```bash
+whatweb networkwalks.com
+```
+
+### Observations
+
+| Parameter | Detected Technology |
+|---|---|
+| Web Server | Apache |
+| CMS | WordPress 7.1.4 |
+| Framework | Bootstrap 7.1.4 |
+| JavaScript Library | jQuery 3.7.1 |
+| Plugin | WordPress Download Manager 3.3.76 |
+| Website Title | Networkwalks Academy |
+| IP Address | 192.232.216.135 |
+| HTTP Status | 301 Moved Permanently |
+| HTTPS Status | 200 OK |
+
+Additional observations included:
+
+- Open Graph Protocol.
+- WordPress-related cookies.
+- HTTP security-related headers.
+- Website contact email information.
+
+### Analysis
+
+WhatWeb successfully fingerprinted the target website and identified its apparent web technologies.
+
+The HTTP response returned a 301 redirect, while the HTTPS response returned 200 OK.
+
+The detected software versions are fingerprint-based observations and have not been independently verified.
+
+### Result
+
+The website's web server, CMS and associated technologies were successfully identified.
+
+**Evidence:** `W2-PM1_WhatWeb_Result.png`
+
+---
+
+## 6.5 Tool 5 – WAFW00F
+
+**Objective:** Identify whether the target website uses a Web Application Firewall.
+
+**Command executed:**
+
+```bash
+wafw00f https://networkwalks.com
+```
+
+**Tool Version:** 2.3.2
+
+### Observations
+
+| Parameter | Result |
+|---|---|
+| Target | https://networkwalks.com |
+| WAF Detected | ModSecurity |
+| Associated Vendor | SpiderLabs |
+| Number of Requests | 2 |
+
+### Analysis
+
+WAFW00F identified ModSecurity (SpiderLabs) as the likely Web Application Firewall protecting the target website.
+
+A Web Application Firewall helps monitor and filter HTTP requests to protect web applications against malicious traffic.
+
+The detection does not establish the effectiveness of the WAF or prove that all attack vectors are blocked.
+
+### Result
+
+The WAF detection operation successfully identified a ModSecurity signature.
+
+**Evidence:** `W2-PM1_WAFW00F_Result.png`
+
+---
+
+## 6.6 Tool 6 – Nmap
+
+**Objective:** Identify open ports, filtered ports, running network services and their detected versions.
+
+**Command executed:**
+
+```bash
+nmap -sS -sV networkwalks.com
+```
+
+### Command Explanation
+
+- `-sS`: Performs a TCP SYN scan.
+- `-sV`: Attempts to identify running services and their versions.
+
+### General Observations
+
+| Parameter | Result |
+|---|---|
+| Target Domain | networkwalks.com |
+| Target IP | 192.232.216.135 |
+| Host Status | Up |
+| Open TCP Ports | 13 |
+| Filtered TCP Ports | 7 |
+| Closed TCP Ports | 980 |
+| Latency | 0.33 seconds |
+| OS Indication | Linux |
+
+### A. Open Ports
+
+| Port | Service | Detected Version |
+|---|---|---|
+| 21 | FTP | Pure-FTPd |
+| 22 | SSH | OpenSSH 9.9 |
+| 26 | SMTP | Exim 4.100.1 |
+| 53 | DNS | ISC BIND 9.16.23 |
+| 80 | HTTP | Apache httpd |
+| 110 | POP3 | Dovecot pop3d |
+| 143 | IMAP | Dovecot imapd |
+| 443 | HTTPS | Apache httpd |
+| 465 | SSL/SMTP | Exim 4.100.1 |
+| 587 | SMTP | Exim 4.100.1 |
+| 993 | SSL/IMAP | Dovecot imapd |
+| 995 | SSL/POP3 | Dovecot pop3d |
+| 2222 | SSH | OpenSSH 9.9 |
+
+### B. Filtered Ports
+
+| Port | Service |
+|---|---|
+| 25 | SMTP |
+| 139 | NetBIOS-SSN |
+| 389 | LDAP |
+| 445 | Microsoft-DS |
+| 3306 | MySQL |
+| 5432 | PostgreSQL |
+| 9200 | WAP-WSP |
+
+### Analysis
+
+Nmap identified 13 open TCP ports and 7 filtered TCP ports.
+
+The identified services included FTP, SSH, SMTP, DNS, HTTP, HTTPS, POP3 and IMAP.
+
+The scan also detected database-related ports in a filtered state.
+
+The Linux operating system family was indicated by the service information.
+
+### Result
+
+Nmap successfully identified the target's network services, port states and detected software versions.
+
+**Evidence:** `W2-PM1_Nmap_Result.png`
+
+---
+
+# 7. Essential Project – W2-PM5: Zenmap-Based Network Scanning
+
+**Objective:** Perform network scanning through the Zenmap graphical interface and analyze the discovered network services.
+
+**Target:** networkwalks.com
+
+**Command displayed in Zenmap:**
+
+```bash
+nmap -sS -sV networkwalks.com
+```
+
+### 7.1 Scan Summary
+
+| Parameter | Result |
+|---|---|
+| Target IP | 192.232.216.135 |
+| Host Status | Up |
+| Open TCP Ports | 14 |
+| Filtered TCP Ports | 6 |
+| Closed TCP Ports | 980 |
+| Scan Duration | 60.86 seconds |
+| OS Indication | Linux |
+
+### 7.2 Open Ports Identified
+
+| Port | Service | Detected Version |
+|---|---|---|
+| 21 | FTP | Pure-FTPd |
+| 22 | SSH | OpenSSH 9.9 |
+| 26 | SMTP | Exim 4.100.1 |
+| 53 | DNS | ISC BIND 9.16.23 |
+| 80 | HTTP | Apache httpd |
+| 110 | POP3 | Dovecot pop3d |
+| 143 | IMAP | Dovecot imapd |
+| 443 | HTTPS | Apache httpd |
+| 465 | SSL/SMTP | Exim 4.100.1 |
+| 587 | SMTP | Exim 4.100.1 |
+| 993 | SSL/IMAP | Dovecot imapd |
+| 995 | SSL/POP3 | Dovecot pop3d |
+| 2222 | SSH | OpenSSH 9.9 |
+| 3306 | MySQL | MySQL 5.7.44-48 |
+
+### 7.3 Filtered Ports
+
+The Zenmap screenshot displayed the following filtered ports:
+
+| Port | Service |
+|---|---|
+| 25 | SMTP |
+| 135 | MSRPC |
+| 139 | NetBIOS-SSN |
+| 179 | BGP |
+| 445 | Microsoft-DS |
+| 646 | LDP |
+
+### 7.4 Important Observation
+
+The command-line Nmap scan and Zenmap scan produced different results.
+
+In particular:
+
+- The terminal Nmap scan identified port 3306 as filtered.
+- The Zenmap scan identified port 3306 as open and detected MySQL.
+- The terminal scan reported 13 open ports.
+- The Zenmap scan reported 14 open ports.
+
+These results are documented separately because they represent two separate scan executions.
+
+The difference should not be interpreted as a confirmed configuration change or vulnerability. Scan timing, network filtering and response conditions may influence results.
+
+### 7.5 Conclusion
+
+Zenmap successfully executed the network scanning command and displayed the discovered ports, services and detected versions through its graphical interface.
+
+The practical exercise provided experience with graphical network reconnaissance and interpretation of Nmap scan results.
+
+**Evidence:** `W2-PM5_Zenmap_Result.png`
+
+---
+
+# 8. Consolidated Assessment Findings
+
+The following table summarizes the results of the assessment.
+
+| No. | Finding | Observation |
+|---|---|---|
+| 1 | Domain registration | GoDaddy registrar identified |
+| 2 | DNS infrastructure | Two nameservers identified |
+| 3 | Associated hostnames | Five hostnames identified by DNSenum |
+| 4 | DNS zone transfer | Both nameservers returned REFUSED |
+| 5 | Web server | Apache detected |
+| 6 | CMS | WordPress fingerprint detected |
+| 7 | JavaScript library | jQuery detected |
+| 8 | WAF | ModSecurity signature detected |
+| 9 | Network services | Multiple services identified |
+| 10 | Database service | MySQL detected in Zenmap scan |
+
+These are reconnaissance findings and observations. They are not independently validated security vulnerabilities.
+
+# 9. Security Recommendations
+
+Based on the collected observations, the following areas are recommended for further authorized security review.
+
+## 9.1 FTP Security
+
+- Verify whether FTP access is required.
+- Review whether encrypted file transfer is enforced.
+- Restrict access to authorized users and networks.
+
+## 9.2 SSH Security
+
+- Review SSH authentication settings.
+- Enforce strong authentication policies.
+- Restrict administrative access to trusted sources.
+- Review the purpose of the additional SSH service on port 2222.
+
+## 9.3 DNS Security
+
+- Review DNS configuration and access controls.
+- Maintain appropriate DNS zone transfer restrictions.
+- Evaluate DNSSEC deployment requirements.
+
+## 9.4 Web Application Security
+
+- Review WordPress and plugin versions against vendor security advisories.
+- Maintain supported and patched software versions.
+- Review HTTP security headers.
+- Review HTTPS and TLS configuration.
+
+## 9.5 Mail Server Security
+
+- Review SMTP, POP3 and IMAP configurations.
+- Verify encryption requirements.
+- Review authentication and access restrictions.
+
+## 9.6 Database Security
+
+- Review MySQL network exposure.
+- Ensure database services are accessible only to authorized systems.
+- Apply appropriate authentication and network access controls.
+
+## 9.7 Web Application Firewall
+
+- Review ModSecurity rules and configuration.
+- Verify whether relevant attack-detection rules are enabled.
+- Review WAF logs and monitoring configuration.
+
+These recommendations require further validation by an authorized security team.
+
+# 10. Limitations
+
+The assessment had the following limitations:
+
+1. theHarvester returned no findings from the selected CRT.sh source.
+2. Software versions were identified through tool fingerprinting and were not independently verified.
+3. WAF detection did not include effectiveness testing.
+4. No exploitation or vulnerability validation was performed.
+5. No authenticated testing was conducted.
+6. The two Nmap executions produced different results for port 3306 and other port states.
+7. No full authorization document or detailed testing scope was included in the supplied Week 2 project instructions.
+
+Therefore, this report should not be interpreted as a comprehensive security audit or a certification that the target is secure or vulnerable.
+
+# 11. Learning Outcomes
+
+Through this practical project, I gained experience in:
+
+- Understanding domain registration and WHOIS records.
+- Performing passive information gathering.
+- Understanding DNS records and nameserver configurations.
+- Identifying website technologies and frameworks.
+- Understanding Web Application Firewall detection.
+- Performing TCP SYN scanning.
+- Identifying open and filtered network ports.
+- Detecting network services and software versions.
+- Using Zenmap for graphical network scanning.
+- Documenting technical findings in a penetration testing report.
+
+# 12. Final Conclusion
+
+The NetworkWalks Week 2 project provided practical exposure to cybersecurity reconnaissance, domain footprinting and network scanning using Kali Linux.
+
+The six footprinting tools helped identify domain registration information, DNS infrastructure, web technologies, WAF presence and network services.
+
+The compulsory Zenmap exercise provided additional experience in graphical network scanning and service identification.
+
+The collected findings demonstrate the importance of reconnaissance in the penetration testing process. They also highlight the need to document observations accurately, distinguish potential security concerns from confirmed vulnerabilities and conduct further testing only within an explicitly authorized scope.
+
+The practical work improved my understanding of information gathering, network reconnaissance, service identification and technical security documentation.
+
+---
+
+# 13. Project Completion Summary
+
+| Module | Description | Status |
+|---|---|---|
+| W2-PM1 | Footprinting with six Kali tools | Practical executed |
+| W2-PM5 | Zenmap-based Network Scanning | Practical executed |
+| W2-PM-FINAL | Detailed Penetration Testing Report | Document prepared |
+
+**Project:** NetworkWalks Week 2  
+**Domain:** Cybersecurity & Ethical Hacking  
+**Assessment Date:** 13 November 2026
+
+**End of Report**
